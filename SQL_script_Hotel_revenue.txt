@@ -1,0 +1,36 @@
+with hotels as (
+SELECT * FROM dbo.['2018$']
+union
+SELECT * FROM dbo.['2019$']
+union
+SELECT * FROM dbo.['2020$'])
+
+
+
+-----------------Q.1 Ist our hotel revenue growing by year?-------------------
+
+---create a column of revenu by multiplying no.of stays by adr(daily rate)----
+
+select 
+arrival_date_year,
+hotel,
+round(sum((stays_in_week_nights+stays_in_weekend_nights)*adr),2) as total_revenue_cost_of_room 
+from hotels
+group by arrival_date_year, hotel
+
+
+---------------------------------------------------------------------------------
+--- using "Join" to merge hotels table and market_segment table to know which segment got how much discount---
+
+with hotels as(
+select * from dbo.['2018$']
+union
+select * from dbo.['2019$']
+union
+select * from dbo.['2020$'])
+
+select * from hotels
+left join dbo.market_segment$
+on hotels.market_segment = market_segment$.market_segment
+left join dbo.meal_cost$
+on meal_cost$.meal = hotels.meal
